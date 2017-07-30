@@ -1,0 +1,53 @@
+//color
+$color-background: #ccc
+$color-header: #37474F
+$color-font: #333
+$color-link: #ECEFF1 
+$color-card:  #ECEFF1
+$color-secondary: #607D8B
+
+$container-width: 1000px
+$font-size: 16px
+
+
+*
+  box-sizing: border-box
+  -moz-box-sizing: border-box
+  -webkit-box-sizing: border-box
+  list-style: none
+  text-decoration: none
+  font-family: 'Avenir', Helvetica, Arial, sans-serif
+  padding: 0px
+  margin: 0px
+
+body
+  background-color: $color-background
+  width: 100%
+  height: 100%
+  color: $color-font  
+  font-size: $font-size
+
+a
+  text-decoration: none
+  color: $color-link
+
+.container
+  width: $container-width
+  height: auto
+  margin: auto
+
+button
+  border: none
+  font-size: 1.2rem
+  background-color: rgba(0,0,0,0)
+  cursor: pointer
+.btn
+  color: $color-header
+  padding: 5px 10px
+  border: 1px solid $color-secondary
+  transition: all 0.5s
+  margin-right: 5px
+  &:hover
+    border: 1px solid rgba($color-secondary , 0)
+    background-color: $color-secondary
+    color: $color-card
