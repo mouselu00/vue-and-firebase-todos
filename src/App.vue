@@ -6,7 +6,7 @@
       <Cards></Cards>
     </div>
     <Sidebars></Sidebars>
-    
+    <Dialog></Dialog>
   </div>
 </template>
 
@@ -15,6 +15,7 @@
 import Navs from './components/Navs';
 import Cards from './components/Cards';
 import Sidebars from './components/Sidebars';
+import Dialog from './components/Dialog';
 
 export default {
   name: 'app',
@@ -23,6 +24,7 @@ export default {
     Navs,
     Cards,
     Sidebars,
+    Dialog,
   },
 };
 </script>
