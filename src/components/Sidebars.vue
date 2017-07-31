@@ -11,6 +11,8 @@
 </template>
 
 <script>
+import eventBus from '../main';
+
 export default {
   name: 'Sidebars',
   data() {
@@ -18,10 +20,19 @@ export default {
       showSidebar: true,
     };
   },
-
   methods: {
-
+    toggleSidebar() {
+      this.showSidebar = !this.showSidebar;
+    },
   },
+  // hook
+  created() {
+    eventBus.$on('toggleSidebar', this.toggleSidebar);
+  },
+  beforeDestroy() {
+    eventBus.$off('toggleSidebar');
+  },
+
 };
 </script>
 

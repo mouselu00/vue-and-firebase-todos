@@ -4,14 +4,24 @@
       .header-brand
         p LoGo
       nav.header-nav
-        a(href='#').header-nav_link NEW TASK
-        a(href='#').header-nav_link SIGN UP
+        a(href='#').header-nav_link(@click.prevent="toggleSidebar") NEW TASK
+        a(href='#').header-nav_link(@click.prevent="toggleDialog") SIGN UP
         a(href='#').header-nav_link SIGN IN
         a(href='#').header-nav_link LOGOUT
 </template>
 <script>
+import eventBus from '../main';
+
 export default {
   name: 'Navs',
+  methods: {
+    toggleDialog() {
+      eventBus.$emit('toggleDialog');
+    },
+    toggleSidebar() {
+      eventBus.$emit('toggleSidebar');
+    },
+  },
 };
 </script>
 <style lang="sass" scope>

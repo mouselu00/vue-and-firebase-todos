@@ -12,8 +12,10 @@
 </template>
 
 <script>
+import eventBus from '../main';
+
 export default {
-  name: 'Dialog',
+  name: 'Dialogs',
   data() {
     return {
       title: 'SIGN UP',
@@ -21,7 +23,18 @@ export default {
     };
   },
   methods: {
+    toggleDialog() {
+      this.closeDialog = !this.closeDialog;
+    },
   },
+  // hook
+  created() {
+    eventBus.$on('toggleDialog', this.toggleDialog);
+  },
+  beforeDestroy() {
+    eventBus.$off('toggleDialog');
+  },
+
 };
 </script>
 

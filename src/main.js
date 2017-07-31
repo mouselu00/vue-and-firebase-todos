@@ -3,6 +3,10 @@
 import Vue from 'vue';
 import App from './App';
 
+// event bus
+const eventBus = new Vue();
+export default eventBus;
+
 Vue.config.productionTip = false;
 
 /* eslint-disable no-new */
