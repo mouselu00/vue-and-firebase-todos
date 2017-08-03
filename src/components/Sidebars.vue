@@ -4,10 +4,10 @@
       p Create Task
       button(@click="showSidebar = !showSidebar") X
     .sidebar-form
-      input.sidebar-form_title(placeholder="Title...")
-      input.sidebar-form_date(placeholder="Date...")
-      textarea.sidebar-form_content(placeholder="Contents...")
-      button.btn Submit
+      input.sidebar-form_title(v-model="todo.title" type="text" placeholder="Title...")
+      input.sidebar-form_date(v-model="todo.date" type="date" placeholder="Date...")
+      textarea.sidebar-form_content(v-model="todo.content" placeholder="Contents...")
+      button.btn(@click.prevent="add_todos") Submit
 </template>
 
 <script>
@@ -18,11 +18,29 @@ export default {
   data() {
     return {
       showSidebar: false,
+      todo: {
+        title: null,
+        date: null,
+        content: null,
+      },
     };
   },
   methods: {
     toggleSidebar() {
       this.showSidebar = !this.showSidebar;
+    },
+    // emit to parent App.vue
+    add_todos() {
+      const trimTodo = {
+        title: this.todo.title.trim(),
+        date: this.todo.date.trim(),
+        content: this.todo.content.trim(),
+      };
+      this.$emit('addtodo', trimTodo);
+      this.todo.title = null;
+      this.todo.date = null;
+      this.todo.content = null;
+      this.toggleSidebar();
     },
   },
   // hook

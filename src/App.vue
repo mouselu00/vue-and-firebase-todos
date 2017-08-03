@@ -4,13 +4,15 @@
     <Navs></Navs>
     <div class="container">
       <div class="cards">
+        <h2 v-show="todos.length <= 0">Create Todo</h2>
         <Card 
           v-for="todo in todos" 
-          :key="todo"
+          :key="todo.title"
+          :todo="todo"
           ></Card>
       </div>
     </div>
-    <Sidebars></Sidebars>
+    <Sidebars @addtodo="addTodo"></Sidebars>
     <Dialogs></Dialogs>
   </div>
 </template>
@@ -27,7 +29,7 @@ export default {
   name: 'app',
   data() {
     return {
-      todos: [1, 2, 3, 4, 5],
+      todos: [],
     };
   },
   components: {
@@ -36,6 +38,12 @@ export default {
     Card,
     Sidebars,
     Dialogs,
+  },
+  methods: {
+    // method from addtodo by Sidebars.vue
+    addTodo(data = null) {
+      this.todos.push(data);
+    },
   },
 };
 </script>
