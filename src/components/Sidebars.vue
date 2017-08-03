@@ -17,7 +17,7 @@ export default {
   name: 'Sidebars',
   data() {
     return {
-      showSidebar: true,
+      showSidebar: false,
     };
   },
   methods: {

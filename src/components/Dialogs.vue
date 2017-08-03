@@ -19,7 +19,7 @@ export default {
   data() {
     return {
       title: 'SIGN UP',
-      closeDialog: false,
+      closeDialog: true,
     };
   },
   methods: {

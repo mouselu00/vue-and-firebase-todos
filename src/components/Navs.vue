@@ -16,9 +16,11 @@ export default {
   name: 'Navs',
   methods: {
     toggleDialog() {
+      // in Dialog.vue
       eventBus.$emit('toggleDialog');
     },
     toggleSidebar() {
+      // in Sidebars.vue
       eventBus.$emit('toggleSidebar');
     },
   },
