@@ -7,8 +7,10 @@
         <h2 v-show="todos.length <= 0">Create Todo</h2>
         <Card 
           v-for="todo in todos" 
-          :key="todo.title"
+          :key="todo.key  "
           :todo="todo"
+          @removetodos="removeTodos"
+          @updatetodo="updateTodo"
           ></Card>
       </div>
     </div>
@@ -18,12 +20,26 @@
 </template>
 
 <script>
+/* eslint-disable */
 // import Hello from './components/Hello';
+
+import firebase from 'firebase';
+
 import Navs from './components/Navs';
 import Card from './components/Card';
 import Sidebars from './components/Sidebars';
 import Dialogs from './components/Dialogs';
 
+// firebase config
+const config = {
+  apiKey: 'AIzaSyCPa1K505ZFulvXbSJbYaSVEq0taCSo6AM',
+  authDomain: 'todos-a07d6.firebaseapp.com',
+  databaseURL: 'https://todos-a07d6.firebaseio.com',
+  projectId: 'todos-a07d6',
+  storageBucket: 'todos-a07d6.appspot.com',
+  messagingSenderId: '1088273962315',
+};
+firebase.initializeApp(config);
 
 export default {
   name: 'app',
@@ -42,8 +58,26 @@ export default {
   methods: {
     // method from addtodo by Sidebars.vue
     addTodo(data = null) {
-      this.todos.push(data);
+      const dbRef = firebase.database().ref();
+      dbRef.push(data);
     },
+    removeTodos(k) {
+      firebase.database().ref(k).remove();
+    },
+    updateTodo(data) {
+      firebase.database().ref(data.keys).update({title: data.title, content: data.content});
+    },
+  },
+  created() {
+    firebase.database().ref().on('value', (res) => {
+      const userData = res.val();
+      const dataArray = [];
+      for (var key in userData) {
+        userData[key].key = key;
+        dataArray.push(userData[key]);  
+      }
+      this.todos = dataArray;
+    });
   },
 };
 </script>
