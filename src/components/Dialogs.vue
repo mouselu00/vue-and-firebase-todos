@@ -1,14 +1,25 @@
 <template lang="pug">
-  .dialog(:class="{'close-dialog': closeDialog}")
-    .dialog-title
-      p {{ title }}
-    .dialog-form
-      input(type="email" placeholder="@mail.com")
-      input(type="password" placeholder="Password")
-      input(type="password" placeholder="Password Comfirm")
-    .dialog-action
-      button.btn SIGN    
-      button.btn.dialog-btn_close(@click.prevent="closeDialog =!closeDialog") CLOSE
+  div(v-if="types == 'signup'")
+    .dialog(:class="{'close-dialog': closeDialog}")
+      .dialog-title
+        p Sign Up
+      .dialog-form
+        input(type="email" placeholder="@mail.com")
+        input(type="password" placeholder="Password")
+        input(type="password" placeholder="Password Comfirm")
+      .dialog-action
+        button.btn SIGN UP
+        button.btn.dialog-btn_close(@click.prevent="closeDialog =!closeDialog") CLOSE
+  div(v-else)
+    .dialog(:class="{'close-dialog': closeDialog}")
+      .dialog-title
+        p Sign In
+      .dialog-form
+        input(type="email" placeholder="@mail.com")
+        input(type="password" placeholder="Password")
+      .dialog-action
+        button.btn SIGN IN
+        button.btn.dialog-btn_close(@click.prevent="closeDialog =!closeDialog") CLOSE
 </template>
 
 <script>
@@ -18,13 +29,14 @@ export default {
   name: 'Dialogs',
   data() {
     return {
-      title: 'SIGN UP',
       closeDialog: true,
+      types: null,
     };
   },
   methods: {
-    toggleDialog() {
+    toggleDialog(type) {
       this.closeDialog = !this.closeDialog;
+      this.types = type;
     },
   },
   // hook

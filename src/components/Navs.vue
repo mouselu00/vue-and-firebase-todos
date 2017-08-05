@@ -5,8 +5,8 @@
         p LoGo
       nav.header-nav
         a(href='#').header-nav_link(@click.prevent="toggleSidebar") NEW TASK
-        a(href='#').header-nav_link(@click.prevent="toggleDialog") SIGN UP
-        a(href='#').header-nav_link SIGN IN
+        a(href='#').header-nav_link(@click.prevent="toggleDialog('signup')") SIGN UP
+        a(href='#').header-nav_link(@click.prevent="toggleDialog('signin')") SIGN IN
         a(href='#').header-nav_link LOGOUT
 </template>
 <script>
@@ -15,9 +15,9 @@ import eventBus from '../main';
 export default {
   name: 'Navs',
   methods: {
-    toggleDialog() {
+    toggleDialog(type) {
       // in Dialog.vue
-      eventBus.$emit('toggleDialog');
+      eventBus.$emit('toggleDialog', type);
     },
     toggleSidebar() {
       // in Sidebars.vue
