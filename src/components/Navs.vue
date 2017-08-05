@@ -4,24 +4,33 @@
       .header-brand
         p LoGo
       nav.header-nav
-        a(href='#').header-nav_link(@click.prevent="toggleSidebar") NEW TASK
-        a(href='#').header-nav_link(@click.prevent="toggleDialog('signup')") SIGN UP
-        a(href='#').header-nav_link(@click.prevent="toggleDialog('signin')") SIGN IN
-        a(href='#').header-nav_link LOGOUT
+        div(v-if="logstate")
+          a(href='#').header-nav_link(@click.prevent="toggleDialog('signup')") SIGN UP
+          a(href='#').header-nav_link(@click.prevent="toggleDialog('signin')") SIGN IN
+        div(v-else)
+          a(href='#').header-nav_link(@click.prevent="toggleSidebar") NEW TASK
+          a(href='#').header-nav_link(@click.prevent="logoutHandle") LOGOUT
 </template>
 <script>
 import eventBus from '../main';
 
 export default {
   name: 'Navs',
+  props: ['logstate'],
   methods: {
+    // emit Dialog component to toggle dialog
     toggleDialog(type) {
       // in Dialog.vue
       eventBus.$emit('toggleDialog', type);
     },
+    // emit Sidebar component to toggle sidebar
     toggleSidebar() {
       // in Sidebars.vue
       eventBus.$emit('toggleSidebar');
+    },
+    // emit parent methods
+    logoutHandle() {
+      this.$emit('logouthandle');
     },
   },
 };

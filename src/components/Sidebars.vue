@@ -8,6 +8,7 @@
       input.sidebar-form_date(v-model="todo.date" type="date" placeholder="Date...")
       textarea.sidebar-form_content(v-model="todo.content" placeholder="Contents...")
       button.btn(@click.prevent="add_todos") Submit
+      p.warning(v-show="error") All Field Is Required!!
 </template>
 
 <script>
@@ -17,35 +18,42 @@ export default {
   name: 'Sidebars',
   data() {
     return {
-      showSidebar: false,
+      showSidebar: false, // toggle to show sidebar state
+      error: false,       // show error msg toggle state
       todo: {
-        title: null,
-        date: null,
-        content: null,
+        title: null,      // new todo title state
+        date: null,       // new todo date state
+        content: null,    // new todo content state
       },
     };
   },
   methods: {
+    // toggle sidebar state
     toggleSidebar() {
       this.showSidebar = !this.showSidebar;
     },
-    // emit to parent App.vue
+    // emit to parent method - add new todo
     add_todos() {
-      const trimTodo = {
-        title: this.todo.title.trim(),
-        date: this.todo.date.trim(),
-        content: this.todo.content.trim(),
-      };
-      this.$emit('addtodo', trimTodo);
-      this.todo.title = null;
-      this.todo.date = null;
-      this.todo.content = null;
-      this.toggleSidebar();
+      if (this.todo.title && this.todo.date && this.todo.content) {
+        this.error = false;
+        const trimTodo = {
+          title: this.todo.title.trim(),
+          date: this.todo.date.trim(),
+          content: this.todo.content.trim(),
+        };
+        this.$emit('addtodo', trimTodo);
+        this.todo.title = null;
+        this.todo.date = null;
+        this.todo.content = null;
+        this.toggleSidebar();
+      } else {
+        this.error = true;
+      }
     },
   },
   // hook
   created() {
-    eventBus.$on('toggleSidebar', this.toggleSidebar);
+    eventBus.$on('toggleSidebar', this.toggleSidebar);    // listen bro component to toggle sidebar
   },
   beforeDestroy() {
     eventBus.$off('toggleSidebar');
@@ -53,8 +61,6 @@ export default {
 
 };
 </script>
-
-
 
 <style lang="sass" scoped>
   
@@ -105,5 +111,8 @@ export default {
         color: $color-secondary
       .sidebar-form_content
         min-height: 300px
+      .warning
+        color: red
+        font-weight: bold
 </style>
 

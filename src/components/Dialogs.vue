@@ -4,21 +4,36 @@
       .dialog-title
         p Sign Up
       .dialog-form
-        input(type="email" placeholder="@mail.com")
-        input(type="password" placeholder="Password")
-        input(type="password" placeholder="Password Comfirm")
+        input(
+          type="email" 
+          placeholder="@mail.com" 
+          v-model="email")
+        input(
+          type="password" 
+          placeholder="Password" 
+          v-model="password")
+        input(
+          type="password" 
+          placeholder="Password Comfirm"
+          v-model="passwordComfirm")
       .dialog-action
-        button.btn SIGN UP
+        button.btn(@click.prevent="signupHandle") SIGN UP
         button.btn.dialog-btn_close(@click.prevent="closeDialog =!closeDialog") CLOSE
   div(v-else)
     .dialog(:class="{'close-dialog': closeDialog}")
       .dialog-title
         p Sign In
       .dialog-form
-        input(type="email" placeholder="@mail.com")
-        input(type="password" placeholder="Password")
+        input(
+          type="email" 
+          placeholder="@mail.com"
+          v-model="email")
+        input(
+          type="password" 
+          placeholder="Password"
+          v-model="password")
       .dialog-action
-        button.btn SIGN IN
+        button.btn(@click.prevent="signinHandle") SIGN IN
         button.btn.dialog-btn_close(@click.prevent="closeDialog =!closeDialog") CLOSE
 </template>
 
@@ -29,19 +44,45 @@ export default {
   name: 'Dialogs',
   data() {
     return {
-      closeDialog: true,
-      types: null,
+      closeDialog: true,        // state to toggle dialog
+      types: null,              // state to togle signup or signin dialog template
+      password: null,           // signup or sign in password state
+      passwordComfirm: null,    // signup password comfirm state
+      email: null,              // signup or signin email state
     };
   },
   methods: {
+    // to toggle dialog and recognize types of template to show
     toggleDialog(type) {
       this.closeDialog = !this.closeDialog;
       this.types = type;
     },
+    // emit parent method - signup
+    signupHandle() {
+      const sinUpData = {
+        password: this.password,
+        passwordComfirm: this.passwordComfirm,
+        email: this.email,
+      };
+      this.$emit('signuphandle', sinUpData);
+      this.password = null;
+      this.passwordComfirm = null;
+      this.email = null;
+    },
+    // emit parent methods - signin
+    signinHandle() {
+      const signInData = {
+        password: this.password,
+        email: this.email,
+      };
+      this.$emit('signinhandle', signInData);
+      this.password = null;
+      this.email = null;
+    },
   },
   // hook
   created() {
-    eventBus.$on('toggleDialog', this.toggleDialog);
+    eventBus.$on('toggleDialog', this.toggleDialog);    // listen bro component to toggle Dialog
   },
   beforeDestroy() {
     eventBus.$off('toggleDialog');

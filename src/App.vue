@@ -1,27 +1,20 @@
 <template>
   <div id="app">
-    <!-- <hello></hello> -->
-    <Navs></Navs>
+    <Navs @logouthandle="logoutHandle" :logstate="logout"></Navs>
     <div class="container">
       <div class="cards">
         <h2 v-show="todos.length <= 0">Create Todo</h2>
-        <Card 
-          v-for="todo in todos" 
-          :key="todo.key  "
-          :todo="todo"
-          @removetodos="removeTodos"
-          @updatetodo="updateTodo"
-          ></Card>
+        <h2 v-show="!logout <= 0">Sign up</h2>
+        <Card v-for="todo in todos" :key="todo.key  " :todo="todo" @removetodos="removeTodos" @updatetodo="updateTodo"></Card>
       </div>
     </div>
     <Sidebars @addtodo="addTodo"></Sidebars>
-    <Dialogs></Dialogs>
+    <Dialogs @signuphandle="signupHandle" @signinhandle="signinHandle"></Dialogs>
   </div>
 </template>
 
 <script>
 /* eslint-disable */
-// import Hello from './components/Hello';
 
 import firebase from 'firebase';
 
@@ -29,6 +22,8 @@ import Navs from './components/Navs';
 import Card from './components/Card';
 import Sidebars from './components/Sidebars';
 import Dialogs from './components/Dialogs';
+
+import eventBus from './main';
 
 // firebase config
 const config = {
@@ -46,6 +41,7 @@ export default {
   data() {
     return {
       todos: [],
+      logout: true,
     };
   },
   components: {
@@ -56,27 +52,69 @@ export default {
     Dialogs,
   },
   methods: {
-    // method from addtodo by Sidebars.vue
+    // create new todo to firebase
     addTodo(data = null) {
-      const dbRef = firebase.database().ref();
+      const userID = firebase.auth().currentUser.uid;
+      const dbRef = firebase.database().ref(`users/${userID}/todos`);
       dbRef.push(data);
     },
+    // remove todo from firebase
     removeTodos(k) {
-      firebase.database().ref(k).remove();
+      const userID = firebase.auth().currentUser.uid;
+      firebase.database().ref(`users/${userID}/todos/${k}`).remove();
     },
+    // update todo to firebase
     updateTodo(data) {
-      firebase.database().ref(data.keys).update({title: data.title, content: data.content});
+      const userID = firebase.auth().currentUser.uid;
+      firebase.database().ref(`users/${userID}/todos/${data.keys}`).update({ title: data.title, content: data.content });
+    },
+    // create new user
+    signupHandle(signUpData) {
+      if (signUpData.password == signUpData.passwordComfirm) {
+        firebase.auth().createUserWithEmailAndPassword(signUpData.email, signUpData.password)
+          .then((res) => {
+            eventBus.$emit('toggleDialog');
+          })
+          .catch((err) => {
+            console.log(err);
+          })
+      } else {
+        alert('password not some!');
+      }
+    },
+    // sign in
+    signinHandle(signinData) {
+      firebase.auth().signInWithEmailAndPassword(signinData.email, signinData.password)
+        .then((res) => {
+          eventBus.$emit('toggleDialog');
+        })
+        .catch((err) => {
+          alert(err);
+        });
+    },
+    // logout user
+    logoutHandle() {
+      firebase.auth().signOut();
     },
   },
   created() {
-    firebase.database().ref().on('value', (res) => {
-      const userData = res.val();
-      const dataArray = [];
-      for (var key in userData) {
-        userData[key].key = key;
-        dataArray.push(userData[key]);  
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        const userID = firebase.auth().currentUser.uid;
+        firebase.database().ref(`users/${userID}/todos`).on('value', (res) => {
+          const userData = res.val();
+          const dataArray = [];
+          for (var key in userData) {
+            userData[key].key = key;
+            dataArray.push(userData[key]);
+          }
+          this.todos = dataArray;
+          this.logout = false;
+        });
+      } else {
+        this.logout = true;
+        this.todos = [];
       }
-      this.todos = dataArray;
     });
   },
 };
