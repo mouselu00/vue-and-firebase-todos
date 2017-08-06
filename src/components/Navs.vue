@@ -5,11 +5,11 @@
         p LoGo
       nav.header-nav
         div(v-if="logstate")
-          a(href='#').header-nav_link(@click.prevent="toggleDialog('signup')") SIGN UP
-          a(href='#').header-nav_link(@click.prevent="toggleDialog('signin')") SIGN IN
+          a(href='#' @click.prevent="toggleDialog('signup')").header-nav_link SIGN UP
+          a(href='#' @click.prevent="toggleDialog('signin')").header-nav_link SIGN IN
         div(v-else)
-          a(href='#').header-nav_link(@click.prevent="toggleSidebar") NEW TASK
-          a(href='#').header-nav_link(@click.prevent="logoutHandle") LOGOUT
+          a(href='#' @click.prevent="toggleSidebar").header-nav_link NEW TASK
+          a(href='#' @click.prevent="logoutHandle").header-nav_link LOGOUT
 </template>
 <script>
 import eventBus from '../main';
