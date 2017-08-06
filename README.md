@@ -3,6 +3,7 @@
 这是一个参考`ReactJS`的一个App编译成`VueJS`的自我练习专案。为了让自己更了解`Vue`+ `firebase`建构App的知识,而实做是最快上手的。
 
 Source: [Let's Code Along: Noted](https://www.youtube.com/playlist?list=PL57atfCFqj2g46GOvNNU1cnBUv3_X-uot)
+
 [DEMO](http://mouselu00.github.io/vue-and-firebase-todos)
 
 ## 功能
